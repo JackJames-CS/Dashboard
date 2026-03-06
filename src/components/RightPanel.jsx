@@ -1,16 +1,16 @@
 import { rightPanelData } from '../data/mockData'
 
 export default function RightPanel() {
-  const { quickNote, recentActivity, quickTasks } = rightPanelData
+  const { quickNote, recentActivity } = rightPanelData
 
   return (
-    <aside className="w-[var(--right-panel-width)] flex-shrink-0 bg-white border-l border-surface-200/80 flex flex-col overflow-hidden">
-      <div className="p-4 border-b border-surface-100">
+    <aside className="w-[var(--right-panel-width)] flex-shrink-0 bg-surface-200 border-l border-surface-300/50 flex flex-col overflow-hidden">
+      <div className="p-4 border-b border-surface-300/40">
         <h2 className="text-sm font-semibold text-surface-800">Quick tools</h2>
       </div>
       <div className="flex-1 overflow-y-auto p-4 space-y-6">
         {/* Quick notes */}
-        <div className="rounded-xl bg-surface-50 border border-surface-200/80 p-3 shadow-panel">
+        <div className="rounded-xl bg-surface-100 border border-surface-300/50 p-3 shadow-panel">
           <h3 className="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-2">Quick note</h3>
           <textarea
             placeholder="Jot something down..."
@@ -21,7 +21,7 @@ export default function RightPanel() {
         </div>
 
         {/* Recent activity */}
-        <div className="rounded-xl bg-surface-50 border border-surface-200/80 p-3 shadow-panel">
+        <div className="rounded-xl bg-surface-100 border border-surface-300/50 p-3 shadow-panel">
           <h3 className="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-3">Recent activity</h3>
           <ul className="space-y-2">
             {recentActivity.map((item, i) => (
@@ -35,13 +35,13 @@ export default function RightPanel() {
         </div>
 
         {/* Quick task */}
-        <div className="rounded-xl bg-surface-50 border border-surface-200/80 p-3 shadow-panel">
+        <div className="rounded-xl bg-surface-100 border border-surface-300/50 p-3 shadow-panel">
           <h3 className="text-xs font-semibold text-surface-500 uppercase tracking-wider mb-2">Quick task</h3>
           <div className="flex gap-2">
             <input
               type="text"
               placeholder="Add a task..."
-              className="flex-1 px-3 py-2 rounded-lg border border-surface-200 text-sm outline-none focus:ring-2 focus:ring-accent-indigo/20 focus:border-accent-indigo"
+              className="flex-1 px-3 py-2 rounded-lg border border-surface-300 bg-surface-50 text-surface-800 text-sm outline-none focus:ring-2 focus:ring-accent-indigo/20 focus:border-accent-indigo placeholder:text-surface-400"
             />
             <button className="px-3 py-2 rounded-lg bg-accent-indigo text-white text-sm font-medium hover:bg-accent-indigo/90 transition-colors">
               Add

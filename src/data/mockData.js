@@ -97,6 +97,16 @@ export const rightPanelData = {
   quickTasks: ['New task...'],
 };
 
+// School quick links
+export const schoolLinks = [
+  { label: 'Moodle', url: '#', accent: 'amber' },
+  { label: 'Library', url: '#', accent: 'blue' },
+  { label: 'Student Portal', url: '#', accent: 'indigo' },
+  { label: 'MU Email', url: '#', accent: 'emerald' },
+  { label: 'Timetable', url: '#', accent: 'violet' },
+  { label: 'Grades', url: '#', accent: 'amber' },
+]
+
 // School page — assignments as cards
 export const schoolAssignmentsPage = [
   { title: 'Algorithms HW4', course: 'CS 301', due: 'Mar 8, 11:59 PM', progress: 60, priority: 'high' },

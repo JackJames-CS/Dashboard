@@ -19,7 +19,6 @@ export default function App() {
         <Route path="tasks" element={<Tasks />} />
         <Route path="finances" element={<Placeholder title="Finances" subtitle="Spending, income & bills." />} />
         <Route path="notes" element={<Placeholder title="Notes" subtitle="Quick notes & docs." />} />
-        <Route path="ai-agents" element={<Placeholder title="AI Agents" subtitle="Configure AI assistants." />} />
         <Route path="automation" element={<Placeholder title="Automation" subtitle="Workflows & triggers." />} />
         <Route path="settings" element={<Placeholder title="Settings" subtitle="Preferences & account." />} />
       </Route>
