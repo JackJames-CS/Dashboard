@@ -1,5 +1,7 @@
 import Card from '../components/ui/Card'
-import { schoolData, schoolAssignmentsPage, schoolLinks } from '../data/mockData'
+import DataState from '../components/ui/DataState'
+import { useSchoolAssignments } from '../hooks/useSchoolAssignments'
+import { schoolData, schoolLinks } from '../data/mockData'
 
 const accentMap = {
   amber: 'bg-accent-amber/20 text-accent-amber',
@@ -10,6 +12,8 @@ const accentMap = {
 }
 
 export default function School() {
+  const { assignments, loading, error } = useSchoolAssignments()
+
   return (
     <div className="p-6 space-y-6">
       <div>
@@ -20,37 +24,39 @@ export default function School() {
       {/* Assignments */}
       <section>
         <h2 className="text-lg font-semibold text-surface-800 mb-4">Assignments</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {schoolAssignmentsPage.map((a, i) => (
-            <div
-              key={i}
-              className="rounded-xl bg-surface-200 border border-surface-300/50 shadow-card p-4 hover:shadow-card-hover transition-shadow"
-            >
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="font-medium text-surface-800">{a.title}</h3>
-                <span
-                  className={`text-xs px-2 py-0.5 rounded-full ${
-                    a.priority === 'high'
-                      ? 'bg-red-900/40 text-red-400'
-                      : a.priority === 'medium'
-                      ? 'bg-amber-900/40 text-amber-400'
-                      : 'bg-surface-300 text-surface-500'
-                  }`}
-                >
-                  {a.priority}
-                </span>
+        <DataState loading={loading} error={error}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {assignments.map((a) => (
+              <div
+                key={a.id}
+                className="rounded-xl bg-surface-200 border border-surface-300/50 shadow-card p-4 hover:shadow-card-hover transition-shadow"
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="font-medium text-surface-800">{a.title}</h3>
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded-full ${
+                      a.priority === 'high'
+                        ? 'bg-red-900/40 text-red-400'
+                        : a.priority === 'medium'
+                        ? 'bg-amber-900/40 text-amber-400'
+                        : 'bg-surface-300 text-surface-500'
+                    }`}
+                  >
+                    {a.priority}
+                  </span>
+                </div>
+                <p className="text-sm text-surface-500 mb-3">{a.course} · Due {a.due}</p>
+                <div className="w-full h-2 bg-surface-300 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-accent-violet rounded-full transition-all"
+                    style={{ width: `${a.progress}%` }}
+                  />
+                </div>
+                <p className="text-xs text-surface-500 mt-2">{a.progress}% complete</p>
               </div>
-              <p className="text-sm text-surface-500 mb-3">{a.course} · Due {a.due}</p>
-              <div className="w-full h-2 bg-surface-300 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-accent-violet rounded-full transition-all"
-                  style={{ width: `${a.progress}%` }}
-                />
-              </div>
-              <p className="text-xs text-surface-500 mt-2">{a.progress}% complete</p>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </DataState>
       </section>
 
       {/* Quick Links */}

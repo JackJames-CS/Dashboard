@@ -1,7 +1,10 @@
 import Card from '../components/ui/Card'
-import { kanbanColumns } from '../data/mockData'
+import DataState from '../components/ui/DataState'
+import { useKanban } from '../hooks/useKanban'
 
 export default function Projects() {
+  const { kanbanColumns, loading, error } = useKanban()
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -35,29 +38,31 @@ export default function Projects() {
       {/* Kanban task board */}
       <section>
         <h2 className="text-lg font-semibold text-surface-800 mb-4">Task board</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {kanbanColumns.map((col) => (
-            <div
-              key={col.id}
-              className="rounded-xl bg-surface-50 border border-surface-200/80 overflow-hidden flex flex-col min-h-[280px]"
-            >
-              <div className="px-4 py-3 border-b border-surface-200 bg-white">
-                <h3 className="text-sm font-semibold text-surface-800">{col.title}</h3>
+        <DataState loading={loading} error={error}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {kanbanColumns.map((col) => (
+              <div
+                key={col.id}
+                className="rounded-xl bg-surface-50 border border-surface-200/80 overflow-hidden flex flex-col min-h-[280px]"
+              >
+                <div className="px-4 py-3 border-b border-surface-200 bg-white">
+                  <h3 className="text-sm font-semibold text-surface-800">{col.title}</h3>
+                </div>
+                <div className="flex-1 p-3 space-y-2 overflow-y-auto">
+                  {col.tasks.map((task) => (
+                    <div
+                      key={task.id}
+                      className="rounded-lg bg-white border border-surface-200/80 p-3 shadow-panel hover:shadow-card transition-shadow"
+                    >
+                      <p className="text-sm font-medium text-surface-800">{task.title}</p>
+                      <p className="text-xs text-surface-500 mt-1">{task.project}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="flex-1 p-3 space-y-2 overflow-y-auto">
-                {col.tasks.map((task) => (
-                  <div
-                    key={task.id}
-                    className="rounded-lg bg-white border border-surface-200/80 p-3 shadow-panel hover:shadow-card transition-shadow"
-                  >
-                    <p className="text-sm font-medium text-surface-800">{task.title}</p>
-                    <p className="text-xs text-surface-500 mt-1">{task.project}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </DataState>
       </section>
 
       {/* Notes / Files / AI — placeholder sections */}

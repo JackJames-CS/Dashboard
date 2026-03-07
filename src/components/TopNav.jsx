@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export default function TopNav() {
+export default function TopNav({ signOut }) {
   const [searchFocused, setSearchFocused] = useState(false)
 
   return (
@@ -49,6 +49,16 @@ export default function TopNav() {
         {/* Profile */}
         <button className="ml-2 w-8 h-8 rounded-full bg-gradient-to-br from-accent-violet to-accent-blue flex items-center justify-center text-white text-sm font-semibold shadow-card" title="Profile">
           J
+        </button>
+        {/* Sign out */}
+        <button
+          onClick={signOut}
+          className="ml-1 p-2 rounded-lg text-surface-500 hover:bg-surface-300 hover:text-surface-800 transition-colors"
+          title="Sign out"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
+          </svg>
         </button>
       </div>
     </header>
