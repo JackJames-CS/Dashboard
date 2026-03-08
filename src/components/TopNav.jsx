@@ -1,10 +1,21 @@
 import { useState } from 'react'
 
-export default function TopNav({ signOut }) {
+export default function TopNav({ signOut, onMenuToggle }) {
   const [searchFocused, setSearchFocused] = useState(false)
 
   return (
     <header className="h-14 flex-shrink-0 flex items-center justify-between px-4 bg-surface-200/90 backdrop-blur-md border-b border-surface-300/50 sticky top-0 z-30">
+      {/* Hamburger (mobile only) */}
+      <button
+        onClick={onMenuToggle}
+        className="lg:hidden p-2 -ml-1 mr-2 rounded-lg text-surface-500 hover:bg-surface-300 hover:text-surface-800 transition-colors shrink-0"
+        title="Menu"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
       {/* Search / command bar */}
       <div className="flex items-center gap-3 flex-1 max-w-xl">
         <div

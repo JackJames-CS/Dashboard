@@ -11,7 +11,7 @@ export default function Calendar() {
   const { events, loading, error } = useCalendarEvents()
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 md:p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-surface-800">Calendar</h1>

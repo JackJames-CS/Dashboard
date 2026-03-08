@@ -9,7 +9,7 @@ import AIPlannerPanel from '../components/dashboard/AIPlannerPanel'
 
 export default function Dashboard() {
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 md:p-6 space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-surface-800">Mission Control</h1>

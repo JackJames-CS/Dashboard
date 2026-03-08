@@ -46,9 +46,15 @@ const icons = {
   ),
 }
 
-export default function Sidebar() {
+export default function Sidebar({ open, onClose }) {
   return (
-    <aside className="w-[var(--sidebar-width)] flex-shrink-0 bg-surface-200 border-r border-surface-300/50 flex flex-col py-4">
+    <aside className={`
+      fixed top-14 bottom-0 left-0 z-30 w-60
+      bg-surface-200 border-r border-surface-300/50 flex flex-col py-4
+      transition-transform duration-200 ease-in-out
+      lg:static lg:top-auto lg:bottom-auto lg:z-auto lg:translate-x-0 lg:w-[var(--sidebar-width)]
+      ${open ? 'translate-x-0' : '-translate-x-full'}
+    `}>
       <div className="px-4 mb-4">
         <h1 className="text-lg font-semibold text-surface-800 flex items-center gap-2">
           <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-indigo to-accent-blue flex items-center justify-center text-white text-sm font-bold">M</span>
@@ -61,6 +67,7 @@ export default function Sidebar() {
             key={to}
             to={to}
             end={to === '/'}
+            onClick={onClose}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors mx-1 ${
                 isActive

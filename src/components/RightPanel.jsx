@@ -4,7 +4,7 @@ export default function RightPanel() {
   const { quickNote, recentActivity } = rightPanelData
 
   return (
-    <aside className="w-[var(--right-panel-width)] flex-shrink-0 bg-surface-200 border-l border-surface-300/50 flex flex-col overflow-hidden">
+    <aside className="hidden xl:flex xl:flex-col w-[var(--right-panel-width)] flex-shrink-0 bg-surface-200 border-l border-surface-300/50 overflow-hidden">
       <div className="p-4 border-b border-surface-300/40">
         <h2 className="text-sm font-semibold text-surface-800">Quick tools</h2>
       </div>

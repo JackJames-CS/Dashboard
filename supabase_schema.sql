@@ -219,3 +219,11 @@ alter table budget_items enable row level security;
 alter table savings_goals enable row level security;
 create policy "auth only" on budget_items for all using (auth.role() = 'authenticated');
 create policy "auth only" on savings_goals for all using (auth.role() = 'authenticated');
+
+-- ============================================================
+-- Tasks: add priority + due_date columns (run if tasks table exists)
+-- ============================================================
+
+alter table tasks add column if not exists priority text not null default 'medium' check (priority in ('high', 'medium', 'low'));
+alter table tasks add column if not exists due_date date;
+alter table tasks add column if not exists completed_at timestamptz;

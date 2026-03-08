@@ -15,7 +15,7 @@ export default function School() {
   const { assignments, loading, error } = useSchoolAssignments()
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 md:p-6 space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-surface-800">School</h1>
         <p className="text-surface-500 text-sm mt-0.5">Assignments, schedule & study planner</p>
