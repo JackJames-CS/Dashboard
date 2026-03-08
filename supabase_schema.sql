@@ -117,3 +117,105 @@ insert into calendar_events (title, start, "end", category, day) values
   ('Study block',    '16:30', '18:00', 'school',   5),
   ('Team standup',   '09:00', '09:30', 'work',     6),
   ('Dentist',        '11:00', '11:30', 'personal', 6);
+
+-- ============================================================
+-- Work tables (Step 0 — run after initial schema if needed)
+-- ============================================================
+
+create table work_shifts (
+  id         bigint generated always as identity primary key,
+  shift_date date        not null,
+  start_time text        not null,
+  end_time   text        not null,
+  role       text        not null default 'Support',
+  notes      text        not null default '',
+  created_at timestamptz not null default now()
+);
+
+create table work_settings (
+  id             bigint generated always as identity primary key,
+  hourly_rate    numeric(6,2) not null default 16.00,
+  currency       text         not null default 'EUR',
+  break_minutes  integer      not null default 30,
+  created_at     timestamptz  not null default now()
+);
+
+alter table work_shifts enable row level security;
+alter table work_settings enable row level security;
+create policy "auth only" on work_shifts for all using (auth.role() = 'authenticated');
+create policy "auth only" on work_settings for all using (auth.role() = 'authenticated');
+
+-- One settings row
+insert into work_settings (hourly_rate, currency) values (16.00, 'EUR');
+
+-- ============================================================
+-- Finances tables (run after work tables if needed)
+-- ============================================================
+
+create table transactions (
+  id          bigint generated always as identity primary key,
+  txn_date    date          not null default current_date,
+  description text          not null,
+  amount      numeric(10,2) not null,
+  category    text          not null default 'other',
+  type        text          not null default 'expense' check (type in ('income', 'expense')),
+  created_at  timestamptz   not null default now()
+);
+
+create table budgets (
+  id           bigint generated always as identity primary key,
+  category     text          not null,
+  month        text          not null,  -- 'YYYY-MM'
+  limit_amount numeric(10,2) not null default 0,
+  created_at   timestamptz   not null default now(),
+  unique(category, month)
+);
+
+create table payslips (
+  id          bigint generated always as identity primary key,
+  pay_date    date          not null,
+  net_pay     numeric(10,2) not null,
+  gross_pay   numeric(10,2),
+  file_url    text,
+  notes       text          not null default '',
+  created_at  timestamptz   not null default now()
+);
+
+alter table transactions enable row level security;
+alter table budgets enable row level security;
+alter table payslips enable row level security;
+create policy "auth only" on transactions for all using (auth.role() = 'authenticated');
+create policy "auth only" on budgets for all using (auth.role() = 'authenticated');
+create policy "auth only" on payslips for all using (auth.role() = 'authenticated');
+
+-- Supabase Storage: create a bucket named 'payslips' (public: true)
+-- in Supabase Dashboard → Storage → New bucket → name: payslips, public: true
+
+-- ============================================================
+-- Budget items + Savings goals (run after finances tables)
+-- ============================================================
+
+create table budget_items (
+  id        bigint generated always as identity primary key,
+  category  text          not null,
+  name      text          not null,
+  amount    numeric(10,2) not null default 0,
+  frequency text          not null default 'monthly' check (frequency in ('monthly', 'weekly')),
+  created_at timestamptz  not null default now()
+);
+
+create table savings_goals (
+  id            bigint generated always as identity primary key,
+  name          text          not null,
+  target_amount numeric(10,2) not null,
+  saved_amount  numeric(10,2) not null default 0,
+  deadline      date,
+  color         text          not null default 'emerald' check (color in ('emerald', 'blue', 'indigo', 'violet', 'amber')),
+  notes         text          not null default '',
+  created_at    timestamptz   not null default now()
+);
+
+alter table budget_items enable row level security;
+alter table savings_goals enable row level security;
+create policy "auth only" on budget_items for all using (auth.role() = 'authenticated');
+create policy "auth only" on savings_goals for all using (auth.role() = 'authenticated');
