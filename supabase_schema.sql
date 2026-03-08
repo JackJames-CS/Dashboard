@@ -227,3 +227,21 @@ create policy "auth only" on savings_goals for all using (auth.role() = 'authent
 alter table tasks add column if not exists priority text not null default 'medium' check (priority in ('high', 'medium', 'low'));
 alter table tasks add column if not exists due_date date;
 alter table tasks add column if not exists completed_at timestamptz;
+
+-- ============================================================
+-- School modules / grade tracker
+-- ============================================================
+
+create table school_modules (
+  id          bigint generated always as identity primary key,
+  name        text          not null,
+  credits     numeric(4,1)  not null default 5,
+  exam_weight integer       not null default 60 check (exam_weight between 0 and 100),
+  exam_mark   numeric(5,2),
+  ca_mark     numeric(5,2),
+  color       text          not null default 'indigo' check (color in ('blue', 'violet', 'emerald', 'amber', 'indigo')),
+  created_at  timestamptz   not null default now()
+);
+
+alter table school_modules enable row level security;
+create policy "auth only" on school_modules for all using (auth.role() = 'authenticated');
