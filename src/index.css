@@ -2,24 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Layout sizing ───────────────────────────────────────────── */
 :root {
   --sidebar-width: 240px;
   --topbar-height: 56px;
   --right-panel-width: 320px;
 }
 
+/* ── Dark theme (default) ────────────────────────────────────── */
+/* surface-50 = darkest bg, surface-900 = lightest text         */
+:root {
+  --s-50:  15 23 42;
+  --s-100: 26 35 52;
+  --s-200: 30 41 59;
+  --s-300: 51 65 85;
+  --s-400: 100 116 139;
+  --s-500: 148 163 184;
+  --s-600: 203 213 225;
+  --s-700: 226 232 240;
+  --s-800: 241 245 249;
+  --s-900: 248 250 252;
+}
+
+/* ── Light theme ─────────────────────────────────────────────── */
+/* Palette is exactly reversed — surface-50 becomes lightest    */
+html.light {
+  --s-50:  248 250 252;
+  --s-100: 241 245 249;
+  --s-200: 226 232 240;
+  --s-300: 203 213 225;
+  --s-400: 148 163 184;
+  --s-500: 100 116 139;
+  --s-600: 51 65 85;
+  --s-700: 30 41 59;
+  --s-800: 26 35 52;
+  --s-900: 15 23 42;
+}
+
 body {
   @apply bg-surface-100 text-surface-800 antialiased;
 }
 
-/* Subtle scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  @apply bg-surface-200/50 rounded-full;
-}
-::-webkit-scrollbar-thumb {
-  @apply bg-surface-300 rounded-full hover:bg-surface-400;
-}
+/* ── Subtle scrollbar ────────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track  { @apply bg-surface-200/50 rounded-full; }
+::-webkit-scrollbar-thumb  { @apply bg-surface-300 rounded-full hover:bg-surface-400; }

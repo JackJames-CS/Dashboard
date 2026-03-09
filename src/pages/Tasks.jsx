@@ -3,8 +3,9 @@ import Card from '../components/ui/Card'
 import DataState from '../components/ui/DataState'
 import { useTasks } from '../hooks/useTasks'
 import { useKanban } from '../hooks/useKanban'
+import { useHabits } from '../hooks/useHabits'
 
-const views = ['list', 'kanban', 'calendar']
+const views = ['list', 'kanban', 'calendar', 'habits']
 
 const PRIORITY_DOT = { high: 'bg-red-500', medium: 'bg-accent-amber', low: 'bg-accent-emerald' }
 const CATEGORY_BADGE = {
@@ -374,6 +375,157 @@ function FilterChip({ label, active, onClick }) {
   )
 }
 
+// ── Habit accent colours ──────────────────────────────────────
+const HABIT_COLORS = {
+  indigo:  { dot: 'bg-accent-indigo',  ring: 'ring-accent-indigo',  checked: 'bg-accent-indigo text-white',  unchecked: 'border-accent-indigo/40 text-accent-indigo/60' },
+  violet:  { dot: 'bg-accent-violet',  ring: 'ring-accent-violet',  checked: 'bg-accent-violet text-white',  unchecked: 'border-accent-violet/40 text-accent-violet/60' },
+  emerald: { dot: 'bg-accent-emerald', ring: 'ring-accent-emerald', checked: 'bg-accent-emerald text-white', unchecked: 'border-accent-emerald/40 text-accent-emerald/60' },
+  amber:   { dot: 'bg-accent-amber',   ring: 'ring-accent-amber',   checked: 'bg-accent-amber text-white',   unchecked: 'border-accent-amber/40 text-accent-amber/60' },
+  blue:    { dot: 'bg-accent-blue',    ring: 'ring-accent-blue',    checked: 'bg-accent-blue text-white',    unchecked: 'border-accent-blue/40 text-accent-blue/60' },
+}
+const COLOR_OPTIONS = Object.keys(HABIT_COLORS)
+const DAY_LABELS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+
+function HabitsView() {
+  const { habits, loading, error, isLoggedToday, streakFor, last7, addHabit, deleteHabit, toggleToday } = useHabits()
+  const [showForm, setShowForm] = useState(false)
+  const [newName, setNewName] = useState('')
+  const [newColor, setNewColor] = useState('indigo')
+  const [saving, setSaving] = useState(false)
+
+  async function handleAdd(e) {
+    e.preventDefault()
+    if (!newName.trim()) return
+    setSaving(true)
+    await addHabit({ name: newName.trim(), color: newColor })
+    setNewName('')
+    setSaving(false)
+    setShowForm(false)
+  }
+
+  const doneToday = habits.filter(h => isLoggedToday(h.id)).length
+
+  return (
+    <DataState loading={loading} error={error}>
+      <div className="space-y-4">
+        {/* Summary + add button */}
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-surface-500">
+            {doneToday}/{habits.length} done today
+          </p>
+          <button
+            onClick={() => setShowForm(f => !f)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent-indigo/20 text-accent-indigo text-sm font-medium hover:bg-accent-indigo/30 transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Add habit
+          </button>
+        </div>
+
+        {/* Add form */}
+        {showForm && (
+          <form onSubmit={handleAdd} className="flex flex-wrap items-end gap-3 p-4 rounded-xl bg-surface-200 border border-surface-300/50">
+            <div className="flex-1 min-w-[180px]">
+              <label className="text-xs text-surface-500 mb-1 block">Habit name</label>
+              <input
+                autoFocus
+                value={newName}
+                onChange={e => setNewName(e.target.value)}
+                placeholder="e.g. Exercise, Read, Meditate"
+                className="w-full px-3 py-2 rounded-lg border border-surface-300 bg-surface-100 text-sm text-surface-800 placeholder:text-surface-400 outline-none focus:ring-1 focus:ring-accent-indigo"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-surface-500 mb-1 block">Colour</label>
+              <div className="flex gap-1.5">
+                {COLOR_OPTIONS.map(c => (
+                  <button
+                    key={c} type="button"
+                    onClick={() => setNewColor(c)}
+                    className={`w-6 h-6 rounded-full ${HABIT_COLORS[c].dot} ring-offset-1 ring-offset-surface-200 ${newColor === c ? 'ring-2 ring-white/70' : 'opacity-50'}`}
+                  />
+                ))}
+              </div>
+            </div>
+            <button type="submit" disabled={saving || !newName.trim()} className="px-4 py-2 rounded-lg bg-accent-indigo text-white text-sm font-medium disabled:opacity-60">
+              {saving ? 'Adding…' : 'Add'}
+            </button>
+            <button type="button" onClick={() => setShowForm(false)} className="px-3 py-2 rounded-lg bg-surface-300 text-surface-700 text-sm">
+              Cancel
+            </button>
+          </form>
+        )}
+
+        {habits.length === 0 && !showForm && (
+          <p className="text-surface-500 text-sm text-center py-12">No habits yet — add one above to start tracking your consistency.</p>
+        )}
+
+        {/* Habit cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {habits.map(habit => {
+            const colors = HABIT_COLORS[habit.color] || HABIT_COLORS.indigo
+            const done = isLoggedToday(habit.id)
+            const streak = streakFor(habit.id)
+            const week = last7(habit.id)
+
+            return (
+              <div key={habit.id} className="group rounded-xl bg-surface-200 border border-surface-300/50 shadow-card p-4 space-y-3">
+                {/* Header */}
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${colors.dot}`} />
+                    <span className="font-medium text-surface-800 text-sm">{habit.name}</span>
+                  </div>
+                  <button
+                    onClick={() => deleteHabit(habit.id)}
+                    className="opacity-0 group-hover:opacity-100 text-surface-400 hover:text-red-400 transition-all p-0.5"
+                    title="Delete habit"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Last 7 days mini-grid */}
+                <div className="flex gap-1">
+                  {week.map((day) => (
+                    <div key={day.date} className="flex-1 flex flex-col items-center gap-1">
+                      <span className="text-[10px] text-surface-400">{DAY_LABELS[new Date(day.date + 'T12:00:00').getDay()]}</span>
+                      <div className={`w-full aspect-square rounded-sm ${day.done ? colors.dot : 'bg-surface-300/50'}`} />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Streak + check button */}
+                <div className="flex items-center justify-between">
+                  <div className="text-xs text-surface-500">
+                    {streak > 0
+                      ? <span className="font-semibold text-surface-700">{streak} day streak 🔥</span>
+                      : 'No streak yet'}
+                  </div>
+                  <button
+                    onClick={() => toggleToday(habit.id)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
+                      done
+                        ? `${colors.checked} border-transparent`
+                        : `bg-transparent border ${colors.unchecked} hover:opacity-80`
+                    }`}
+                  >
+                    {done ? 'Done ✓' : 'Mark done'}
+                  </button>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </DataState>
+  )
+}
+
 // ── Main page ─────────────────────────────────────────────────
 export default function Tasks() {
   const [view, setView] = useState('list')
@@ -562,6 +714,9 @@ export default function Tasks() {
           </div>
         </Card>
       )}
+
+      {/* ── Habits view ── */}
+      {view === 'habits' && <HabitsView />}
     </div>
   )
 }

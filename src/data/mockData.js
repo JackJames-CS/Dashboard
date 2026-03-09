@@ -122,12 +122,12 @@ export const defaultModules = [
 
 // School quick links
 export const schoolLinks = [
-  { label: 'Moodle', url: '#', accent: 'amber' },
-  { label: 'Library', url: '#', accent: 'blue' },
-  { label: 'Student Portal', url: '#', accent: 'indigo' },
-  { label: 'MU Email', url: '#', accent: 'emerald' },
-  { label: 'Timetable', url: '#', accent: 'violet' },
-  { label: 'Grades', url: '#', accent: 'amber' },
+  { label: 'Moodle', url: 'https://moodle.maynoothuniversity.ie/my/courses.php', accent: 'amber' },
+  { label: 'Timeline', url: 'https://moodle.maynoothuniversity.ie/my/', accent: 'violet' },
+  { label: 'Library', url: 'https://www.maynoothuniversity.ie/library', accent: 'blue' },
+  { label: 'Student Web', url: 'https://studentweb.maynoothuniversity.ie/pls/prodi41/w99pkg.mi_startupAD', accent: 'indigo' },
+  { label: 'MU Email', url: 'https://outlook.office.com/', accent: 'emerald' },
+  { label: 'MU Life', url: 'https://www.mulife.ie/', accent: 'amber' },
 ]
 
 // School page — assignments as cards

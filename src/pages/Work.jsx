@@ -67,16 +67,12 @@ export default function Work() {
     nextThursdayStr,
     addShift,
     deleteShift,
-    updateSettings,
     importFromCalendar,
   } = useWork()
 
   const [showForm, setShowForm] = useState(false)
   const [toast, setToast] = useState(null)
   const [form, setForm] = useState({ shift_date: '', start_time: '', end_time: '', role: 'Support', notes: '' })
-  const [rateInput, setRateInput] = useState('')
-  const [currencyInput, setCurrencyInput] = useState('')
-  const [breakInput, setBreakInput] = useState('')
   const [importing, setImporting] = useState(false)
 
   function showToast(msg) {
@@ -104,33 +100,6 @@ export default function Work() {
     if (error) showToast('Import error: ' + error)
     else showToast(count === 0 ? 'No new shifts found.' : `Imported ${count} shift${count !== 1 ? 's' : ''}.`)
   }
-
-  async function handleRateBlur() {
-    const rate = parseFloat(rateInput)
-    if (!isNaN(rate) && rate > 0) {
-      await updateSettings({ hourly_rate: rate, currency: settings.currency, break_minutes: settings.break_minutes })
-    }
-    setRateInput('')
-  }
-
-  async function handleCurrencyBlur() {
-    if (currencyInput.trim()) {
-      await updateSettings({ hourly_rate: settings.hourly_rate, currency: currencyInput.trim().toUpperCase(), break_minutes: settings.break_minutes })
-    }
-    setCurrencyInput('')
-  }
-
-  async function handleBreakBlur() {
-    const mins = parseInt(breakInput, 10)
-    if (!isNaN(mins) && mins >= 0) {
-      await updateSettings({ hourly_rate: settings.hourly_rate, currency: settings.currency, break_minutes: mins })
-    }
-    setBreakInput('')
-  }
-
-  const displayRate = rateInput !== '' ? rateInput : settings.hourly_rate
-  const displayCurrency = currencyInput !== '' ? currencyInput : settings.currency
-  const displayBreak = breakInput !== '' ? breakInput : settings.break_minutes
 
   return (
     <div className="p-4 md:p-6 space-y-6">
@@ -282,46 +251,6 @@ export default function Work() {
           )}
         </Card>
 
-        {/* Settings */}
-        <Card title="Settings" subtitle="Pay rate & currency">
-          <div className="flex gap-4 flex-wrap">
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-surface-500">Hourly rate</label>
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value={displayRate}
-                onChange={(e) => setRateInput(e.target.value)}
-                onBlur={handleRateBlur}
-                className="w-28 rounded-lg border border-surface-300 bg-surface-50 px-3 py-1.5 text-sm text-surface-800 focus:outline-none focus:ring-1 focus:ring-accent-blue"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-surface-500">Currency</label>
-              <input
-                type="text"
-                maxLength={3}
-                value={displayCurrency}
-                onChange={(e) => setCurrencyInput(e.target.value)}
-                onBlur={handleCurrencyBlur}
-                className="w-20 rounded-lg border border-surface-300 bg-surface-50 px-3 py-1.5 text-sm text-surface-800 uppercase focus:outline-none focus:ring-1 focus:ring-accent-blue"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-surface-500">Unpaid break (mins)</label>
-              <input
-                type="number"
-                min="0"
-                step="5"
-                value={displayBreak}
-                onChange={(e) => setBreakInput(e.target.value)}
-                onBlur={handleBreakBlur}
-                className="w-24 rounded-lg border border-surface-300 bg-surface-50 px-3 py-1.5 text-sm text-surface-800 focus:outline-none focus:ring-1 focus:ring-accent-blue"
-              />
-            </div>
-          </div>
-        </Card>
       </DataState>
     </div>
   )

@@ -8,9 +8,9 @@ export default function Layout({ signOut }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="min-h-screen flex flex-col bg-surface-100">
+    <div className="h-screen flex flex-col bg-surface-100">
       <TopNav signOut={signOut} onMenuToggle={() => setSidebarOpen(o => !o)} />
-      <div className="flex-1 flex min-h-0">
+      <div className="flex-1 flex overflow-hidden">
         {/* Mobile overlay */}
         {sidebarOpen && (
           <div

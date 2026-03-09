@@ -8,6 +8,7 @@ import Calendar from './pages/Calendar'
 import Placeholder from './pages/Placeholder'
 import Work from './pages/Work'
 import Finances from './pages/Finances'
+import Settings from './pages/Settings'
 import Login from './pages/Login'
 import { useAuth } from './hooks/useAuth'
 
@@ -38,7 +39,7 @@ export default function App() {
         <Route path="finances" element={<Finances />} />
         <Route path="notes" element={<Placeholder title="Notes" subtitle="Quick notes & docs." />} />
         <Route path="automation" element={<Placeholder title="Automation" subtitle="Workflows & triggers." />} />
-        <Route path="settings" element={<Placeholder title="Settings" subtitle="Preferences & account." />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
     </Routes>
   )
