@@ -3,7 +3,7 @@ import Card from '../components/ui/Card'
 import DataState from '../components/ui/DataState'
 import { useSchoolAssignments } from '../hooks/useSchoolAssignments'
 import { useSchoolModules, classify } from '../hooks/useSchoolModules'
-import { schoolData, schoolLinks } from '../data/mockData'
+import { schoolData, schoolLinks, defaultModules } from '../data/mockData'
 
 const ACCENT_MAP = {
   amber:  'bg-accent-amber/20 text-accent-amber',
@@ -228,12 +228,70 @@ function AddModuleForm({ onAdd, onCancel }) {
   )
 }
 
+// ── Timetable ─────────────────────────────────────────────────
+const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+const MODULE_COLORS = {
+  CS211: 'bg-accent-indigo/15 text-accent-indigo border-accent-indigo/20',
+  CS230: 'bg-accent-violet/15 text-accent-violet border-accent-violet/20',
+  CS240: 'bg-accent-blue/15 text-accent-blue border-accent-blue/20',
+  CS280: 'bg-accent-emerald/15 text-accent-emerald border-accent-emerald/20',
+  CS335: 'bg-accent-amber/15 text-accent-amber border-accent-amber/20',
+  CS355: 'bg-accent-indigo/10 text-accent-indigo border-accent-indigo/15',
+}
+
+function getModuleColor(name) {
+  const code = Object.keys(MODULE_COLORS).find(k => name === k)
+  return code ? MODULE_COLORS[code] : 'bg-surface-300/40 text-surface-600 border-surface-300/30'
+}
+
+function Timetable({ classes }) {
+  const today = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date().getDay()]
+  const byDay = DAYS.reduce((acc, d) => {
+    acc[d] = classes.filter(c => c.day === d)
+    return acc
+  }, {})
+
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+      {DAYS.map(day => (
+        <div key={day} className={`rounded-xl border p-3 space-y-2 min-w-0 ${day === today ? 'border-accent-violet/40 bg-accent-violet/5' : 'border-surface-300/50 bg-surface-200'}`}>
+          <div className="flex items-center justify-between mb-1">
+            <span className={`text-xs font-bold tracking-wide uppercase ${day === today ? 'text-accent-violet' : 'text-surface-500'}`}>{day}</span>
+            {day === today && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-accent-violet/20 text-accent-violet font-semibold">Today</span>}
+          </div>
+          {byDay[day].length === 0 ? (
+            <p className="text-xs text-surface-400 italic">Free</p>
+          ) : (
+            byDay[day].map((c, i) => (
+              <div key={i} className={`rounded-lg border px-2 py-1.5 min-w-0 overflow-hidden ${getModuleColor(c.name)}`}>
+                <p className="text-xs font-bold leading-tight">{c.name}</p>
+                <p className="text-[11px] leading-tight opacity-75">{c.label}</p>
+                <p className="text-[11px] font-mono mt-0.5 opacity-70">{c.time}</p>
+                {c.room && <p className="text-[11px] opacity-50 truncate">{c.room}</p>}
+              </div>
+            ))
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 // ── Main page ─────────────────────────────────────────────────
 export default function School() {
   const { assignments, loading: aLoading, error: aError, addAssignment, updateProgress, deleteAssignment } = useSchoolAssignments()
   const { modules, qca, loading: mLoading, error: mError, addModule, updateModule, deleteModule } = useSchoolModules()
 
   const [showAddModule, setShowAddModule] = useState(false)
+  const [seeding, setSeeding] = useState(false)
+
+  async function handleSeedModules() {
+    setSeeding(true)
+    for (const mod of defaultModules) {
+      await addModule(mod)
+    }
+    setSeeding(false)
+  }
   const [showAddAssignment, setShowAddAssignment] = useState(false)
   const [newTitle, setNewTitle] = useState('')
   const [newCourse, setNewCourse] = useState('')
@@ -278,15 +336,26 @@ export default function School() {
               {modules.filter(m => m.overall != null).length} of {modules.length} graded
             </p>
           </div>
-          <button
-            onClick={() => setShowAddModule(a => !a)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent-violet/20 text-accent-violet text-sm font-medium hover:bg-accent-violet/30 transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            Add module
-          </button>
+          <div className="flex gap-2">
+            {modules.length === 0 && (
+              <button
+                onClick={handleSeedModules}
+                disabled={seeding}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-300 text-surface-700 text-sm font-medium hover:bg-surface-400 transition-colors disabled:opacity-60"
+              >
+                {seeding ? 'Adding…' : 'Load from calendar'}
+              </button>
+            )}
+            <button
+              onClick={() => setShowAddModule(a => !a)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent-violet/20 text-accent-violet text-sm font-medium hover:bg-accent-violet/30 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              Add module
+            </button>
+          </div>
         </div>
 
         <DataState loading={mLoading} error={mError}>
@@ -417,33 +486,11 @@ export default function School() {
         </div>
       </section>
 
-      {/* ── Timetable + Study planner ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card title="Lecture & lab schedule" subtitle="This week">
-          <ul className="space-y-3">
-            {schoolData.classes.map((c, i) => (
-              <li key={i} className="flex justify-between items-center py-2 border-b border-surface-300/40 last:border-0">
-                <div>
-                  <p className="font-medium text-surface-800">{c.name}</p>
-                  <p className="text-sm text-surface-500">{c.room}</p>
-                </div>
-                <span className="text-sm font-mono text-surface-600">{c.time}</span>
-              </li>
-            ))}
-          </ul>
-        </Card>
-
-        <Card title="Study planner" subtitle="Suggestions">
-          <ul className="space-y-2">
-            {schoolData.studySuggestions.map((s, i) => (
-              <li key={i} className="flex items-center gap-2 text-sm text-surface-700">
-                <span className="w-2 h-2 rounded-full bg-accent-amber shrink-0" />
-                {s}
-              </li>
-            ))}
-          </ul>
-        </Card>
-      </div>
+      {/* ── Timetable ── */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-semibold text-surface-800">Weekly Schedule</h2>
+        <Timetable classes={schoolData.classes} />
+      </section>
     </div>
   )
 }

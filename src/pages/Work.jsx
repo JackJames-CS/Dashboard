@@ -35,9 +35,9 @@ function ShiftRow({ shift, onDelete, breakMinutes = 0 }) {
   const hours = Math.max(0, endH - startH - breakMinutes / 60).toFixed(1)
 
   return (
-    <li className="flex items-center gap-3 py-2 border-b border-surface-100 last:border-0 group text-sm">
-      <span className="font-medium text-surface-700 w-28 shrink-0">{formatDate(shift.shift_date)}</span>
-      <span className="text-surface-500 w-24 shrink-0">{start}–{end}</span>
+    <li className="flex flex-wrap items-center gap-x-3 gap-y-0.5 py-2 border-b border-surface-100 last:border-0 group text-sm">
+      <span className="font-medium text-surface-700 w-24 sm:w-28 shrink-0">{formatDate(shift.shift_date)}</span>
+      <span className="text-surface-500 w-20 sm:w-24 shrink-0">{start}–{end}</span>
       <span className="text-xs px-2 py-0.5 rounded bg-accent-blue/10 text-accent-blue shrink-0">{shift.role}</span>
       <span className="text-surface-500 shrink-0">{hours}h</span>
       {shift.notes && <span className="text-surface-400 truncate flex-1">{shift.notes}</span>}
@@ -142,12 +142,12 @@ export default function Work() {
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-surface-800">Work</h1>
           <p className="text-surface-500 text-sm mt-0.5">Shifts, hours &amp; earnings</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button
             onClick={handleImport}
             disabled={importing}

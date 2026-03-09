@@ -143,7 +143,7 @@ function StatCard({ label, value, color }) {
   return (
     <div className="rounded-xl bg-surface-200 border border-surface-300/50 shadow-card p-5">
       <p className="text-xs text-surface-500 uppercase tracking-wider mb-1">{label}</p>
-      <p className={`text-2xl font-bold font-mono ${color}`}>{value}</p>
+      <p className={`text-lg sm:text-2xl font-bold font-mono break-all ${color}`}>{value}</p>
     </div>
   )
 }
@@ -1042,7 +1042,7 @@ export default function Finances() {
   return (
     <div className="p-4 md:p-6 space-y-6">
       {/* Header + month navigator */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-surface-900">Finances</h1>
           <p className="text-sm text-surface-500 mt-0.5">Earnings, spending & budgets</p>
@@ -1069,7 +1069,7 @@ export default function Finances() {
       <DataState loading={loading} error={error}>
         <>
           {/* Stats row */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-3 sm:gap-4">
             <StatCard
               label="Work Earnings"
               value={fmtMoney(monthEarnings, currency)}
@@ -1088,7 +1088,7 @@ export default function Finances() {
           </div>
 
           {/* Earnings report + Transactions */}
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <EarningsReport shifts={shifts} settings={settings} month={selectedMonth} />
             <TransactionsCard
               transactions={monthTxns}

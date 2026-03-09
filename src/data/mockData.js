@@ -16,11 +16,24 @@ export const schoolData = {
     { name: 'Research paper draft', due: 'Mar 15', progress: 20, course: 'ENG 400' },
   ],
   classes: [
-    { name: 'CS 301 — Algorithms', time: 'MWF 9:30', room: 'Hall 204' },
-    { name: 'MATH 202 — Linear Algebra', time: 'TTh 11:00', room: 'Sci 101' },
-    { name: 'ENG 400 — Research Writing', time: 'W 14:00', room: 'Lib 302' },
+    { name: 'CS211', label: 'L1 Lecture', day: 'Mon', time: '09:00–10:00', room: 'JHL1' },
+    { name: 'CS335', label: 'L1 Lecture', day: 'Mon', time: '12:00–13:00', room: 'ARTSALT' },
+    { name: 'CS211', label: 'L2 Lecture', day: 'Mon', time: '14:00–15:00', room: 'JHL1' },
+    { name: 'CS335', label: 'L2 Lecture', day: 'Mon', time: '17:00–18:00', room: 'TSILT3' },
+    { name: 'CS211', label: 'Labs',       day: 'Tue', time: '09:00–11:00', room: '' },
+    { name: 'CS230', label: 'Labs',       day: 'Tue', time: '11:00–13:00', room: '' },
+    { name: 'CS230', label: 'L1 Lecture', day: 'Tue', time: '13:00–14:00', room: 'TSILT3' },
+    { name: 'CS280', label: 'L1 Lecture', day: 'Tue', time: '16:00–17:00', room: 'IONTH' },
+    { name: 'CS230', label: 'L2 Lecture', day: 'Tue', time: '17:00–18:00', room: 'TH1' },
+    { name: 'CS240', label: 'Labs',       day: 'Wed', time: '13:00–15:00', room: '' },
+    { name: 'CS280', label: 'Labs (opt)', day: 'Wed', time: '15:00–16:00', room: '' },
+    { name: 'CS335', label: 'Labs',       day: 'Wed', time: '16:00–18:00', room: '' },
+    { name: 'CS240', label: 'L1 Lecture', day: 'Thu', time: '11:00–12:00', room: 'JHL1' },
+    { name: 'CS240', label: 'L2 Lecture', day: 'Thu', time: '14:00–15:00', room: 'IONTH' },
+    { name: 'CS355', label: 'L1 Lecture', day: 'Fri', time: '09:00–10:00', room: 'TH1' },
+    { name: 'CS355', label: 'L2 Lecture', day: 'Fri', time: '10:00–11:00', room: 'TH1' },
   ],
-  studySuggestions: ['Review DP problems (2h)', 'LA eigenvectors (1h)', 'Paper outline (30m)'],
+  studySuggestions: ['Review CS211 material (2h)', 'CS240 prep (1h)', 'CS335 readings (1h)'],
 };
 
 export const workData = {
@@ -96,6 +109,16 @@ export const rightPanelData = {
   ],
   quickTasks: ['New task...'],
 };
+
+// Seed modules from calendar (2026 semester)
+export const defaultModules = [
+  { name: 'CS211', credits: 5, exam_weight: 60, color: 'indigo' },
+  { name: 'CS230', credits: 5, exam_weight: 60, color: 'violet' },
+  { name: 'CS240', credits: 5, exam_weight: 60, color: 'blue' },
+  { name: 'CS280', credits: 5, exam_weight: 60, color: 'emerald' },
+  { name: 'CS335', credits: 5, exam_weight: 60, color: 'amber' },
+  { name: 'CS355', credits: 5, exam_weight: 60, color: 'indigo' },
+]
 
 // School quick links
 export const schoolLinks = [

@@ -34,10 +34,10 @@ export default function WorkPanel() {
             ) : (
               <ul className="space-y-2">
                 {nextShifts.map((s) => (
-                  <li key={s.id} className="flex justify-between items-center text-sm py-1.5 border-b border-surface-100 last:border-0">
-                    <span className="font-medium text-surface-700">{formatDate(s.shift_date)}</span>
-                    <span className="text-surface-500">{s.start_time}–{s.end_time}</span>
-                    <span className="text-xs px-2 py-0.5 rounded bg-accent-blue/10 text-accent-blue">{s.role}</span>
+                  <li key={s.id} className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-sm py-1.5 border-b border-surface-100 last:border-0">
+                    <span className="font-medium text-surface-700 shrink-0">{formatDate(s.shift_date)}</span>
+                    <span className="text-surface-500 shrink-0">{s.start_time}–{s.end_time}</span>
+                    <span className="text-xs px-2 py-0.5 rounded bg-accent-blue/10 text-accent-blue shrink-0">{s.role}</span>
                   </li>
                 ))}
               </ul>
