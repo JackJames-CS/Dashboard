@@ -3,6 +3,7 @@ import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
 import School from './pages/School'
 import Projects from './pages/Projects'
+import ProjectDetail from './pages/ProjectDetail'
 import Tasks from './pages/Tasks'
 import Calendar from './pages/Calendar'
 import Placeholder from './pages/Placeholder'
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="school" element={<School />} />
         <Route path="work" element={<Work />} />
         <Route path="projects" element={<Projects />} />
+        <Route path="projects/:id" element={<ProjectDetail />} />
         <Route path="calendar" element={<Calendar />} />
         <Route path="tasks" element={<Tasks />} />
         <Route path="finances" element={<Finances />} />

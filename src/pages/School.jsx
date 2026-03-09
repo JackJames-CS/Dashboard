@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Card from '../components/ui/Card'
 import DataState from '../components/ui/DataState'
 import { useSchoolAssignments } from '../hooks/useSchoolAssignments'
@@ -279,6 +280,7 @@ function Timetable({ classes }) {
 
 // ── Main page ─────────────────────────────────────────────────
 export default function School() {
+  const navigate = useNavigate()
   const { assignments, loading: aLoading, error: aError, addAssignment, updateProgress, deleteAssignment } = useSchoolAssignments()
   const { modules, qca, loading: mLoading, error: mError, addModule, updateModule, deleteModule } = useSchoolModules()
 
@@ -461,6 +463,17 @@ export default function School() {
                       className="w-24 accent-violet-500"
                     />
                   </div>
+                  {a.project_id && (
+                    <button
+                      onClick={() => navigate(`/projects/${a.project_id}`)}
+                      className="mt-3 flex items-center gap-1.5 text-xs text-accent-indigo hover:underline"
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                      Open project board
+                    </button>
+                  )}
                 </div>
               ))}
             </div>

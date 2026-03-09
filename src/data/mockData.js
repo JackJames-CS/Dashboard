@@ -33,7 +33,7 @@ export const schoolData = {
     { name: 'CS355', label: 'L1 Lecture', day: 'Fri', time: '09:00–10:00', room: 'TH1' },
     { name: 'CS355', label: 'L2 Lecture', day: 'Fri', time: '10:00–11:00', room: 'TH1' },
   ],
-  studySuggestions: ['Review CS211 material (2h)', 'CS240 prep (1h)', 'CS335 readings (1h)'],
+  studySuggestions: ['CS280 peer feedback — due Fri Mar 13 (urgent)', 'CS355 Regular Expressions & Pumping Lemma', 'CS211 AVL deletions — drill all 4 cases'],
 };
 
 export const workData = {
@@ -69,35 +69,38 @@ export const tasksData = {
   ],
 };
 
+// Week of Mar 9–15, 2026 — counts reflect real timetable classes + deadlines
 export const calendarWeekEvents = [
-  { day: 'Mon', date: 3, events: 2 },
-  { day: 'Tue', date: 4, events: 1 },
-  { day: 'Wed', date: 5, events: 4 },
-  { day: 'Thu', date: 6, events: 2 },
-  { day: 'Fri', date: 7, events: 3 },
-  { day: 'Sat', date: 8, events: 0 },
-  { day: 'Sun', date: 9, events: 1 },
+  { day: 'Mon', date: 9,  events: 4 }, // CS211 L1+L2, CS335 L1+L2
+  { day: 'Tue', date: 10, events: 4 }, // CS211 Labs, CS230 Labs+L1, CS280 L1
+  { day: 'Wed', date: 11, events: 3 }, // CS240 Labs, CS280 Labs, CS335 Labs
+  { day: 'Thu', date: 12, events: 2 }, // CS240 L1+L2
+  { day: 'Fri', date: 13, events: 3 }, // CS355 L1+L2 + CS280 peer feedback deadline
+  { day: 'Sat', date: 14, events: 0 },
+  { day: 'Sun', date: 15, events: 0 },
 ];
 
+// Real subscriptions: Claude $20, Obsidian Sync $3, Car Insurance $92, Phone $20 + fuel ~$347/mo
 export const financeSnapshot = {
-  monthlySpending: 1240,
-  monthlyIncome: 2100,
+  monthlySpending: 482,
+  monthlyIncome: null, // pulled from work shifts in Supabase
   upcomingBills: [
-    { name: 'Rent', amount: 850, due: 'Mar 10' },
-    { name: 'Utilities', amount: 95, due: 'Mar 12' },
+    { name: 'Phone bill', amount: 20, due: 'Mar 17' },
+    { name: 'Car Insurance', amount: 92, due: 'Mar 22' },
   ],
 };
 
+// Week of Mar 9 — real priorities from vault
 export const aiPlannerSuggestions = {
   dailySchedule: [
-    '08:00 – Focus block (deep work)',
-    '09:30 – CS 301 lecture',
-    '12:00 – Break + lunch',
-    '14:00 – Project sync',
-    '16:30 – Study: Algorithms (2h)',
+    '09:00 – CS211 L1 Lecture (JHL1)',
+    '10:30 – Focus block: CS280 peer feedback prep',
+    '12:00 – CS335 L1 Lecture (ARTSALT)',
+    '14:00 – CS211 L2 Lecture (JHL1)',
+    '17:00 – CS335 L2 Lecture (TSILT3)',
   ],
-  studyRec: 'Prioritize DP problems today — exam in 1 week.',
-  focusBlocks: '2 recommended: 08:00 (90m), 16:30 (2h)',
+  studyRec: 'CS280 peer feedback due Fri Mar 13 — review two assigned submissions. CS230 Lab 2 implementation not yet started.',
+  focusBlocks: 'Priority: CS280 peer feedback → CS335 Week 3 note (Agile) → CS240 Lectures 5–6 notes',
 };
 
 export const rightPanelData = {
