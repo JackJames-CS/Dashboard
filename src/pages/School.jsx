@@ -4,7 +4,33 @@ import Card from '../components/ui/Card'
 import DataState from '../components/ui/DataState'
 import { useSchoolAssignments } from '../hooks/useSchoolAssignments'
 import { useSchoolModules, classify } from '../hooks/useSchoolModules'
-import { schoolData, schoolLinks, defaultModules } from '../data/mockData'
+import { schoolData, schoolLinks, defaultModules, getUpcomingDeadlines, deadlineUrgency } from '../data/mockData'
+
+const URGENCY_CONFIG = {
+  today:       { label: 'Today',     classes: 'bg-red-900/30 border-red-500/30 text-red-400',     dot: 'bg-red-400' },
+  tomorrow:    { label: 'Tomorrow',  classes: 'bg-amber-900/30 border-amber-500/30 text-amber-400', dot: 'bg-amber-400' },
+  'this week': { label: 'This week', classes: 'bg-accent-blue/10 border-accent-blue/20 text-accent-blue', dot: 'bg-accent-blue' },
+  later:       { label: 'Later',     classes: 'bg-surface-200 border-surface-300/50 text-surface-500', dot: 'bg-surface-500' },
+}
+
+function DeadlineItem({ deadline }) {
+  const urgency = deadlineUrgency(deadline.due)
+  const cfg = URGENCY_CONFIG[urgency] || URGENCY_CONFIG.later
+  const due = new Date(deadline.due)
+  const timeStr = due.toLocaleTimeString('en-IE', { hour: '2-digit', minute: '2-digit' })
+  const dateStr = due.toLocaleDateString('en-IE', { weekday: 'short', month: 'short', day: 'numeric' })
+
+  return (
+    <div className={`rounded-xl border p-3 flex items-start gap-3 ${cfg.classes}`}>
+      <span className={`mt-1 w-2 h-2 rounded-full shrink-0 ${cfg.dot}`} />
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-surface-800 truncate">{deadline.title}</p>
+        <p className="text-xs mt-0.5 opacity-75">{dateStr} · {timeStr}</p>
+      </div>
+      <span className={`text-[10px] font-bold uppercase tracking-wide shrink-0 mt-0.5`}>{cfg.label}</span>
+    </div>
+  )
+}
 
 const ACCENT_MAP = {
   amber:  'bg-accent-amber/20 text-accent-amber',
@@ -284,6 +310,8 @@ export default function School() {
   const { assignments, loading: aLoading, error: aError, addAssignment, updateProgress, deleteAssignment } = useSchoolAssignments()
   const { modules, qca, loading: mLoading, error: mError, addModule, updateModule, deleteModule } = useSchoolModules()
 
+  const upcomingDeadlines = getUpcomingDeadlines()
+
   const [showAddModule, setShowAddModule] = useState(false)
   const [seeding, setSeeding] = useState(false)
 
@@ -328,6 +356,21 @@ export default function School() {
           </div>
         )}
       </div>
+
+      {/* ── Upcoming Deadlines ── */}
+      {upcomingDeadlines.length > 0 && (
+        <section className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-surface-800">Upcoming Deadlines</h2>
+            <span className="text-xs text-surface-500">{upcomingDeadlines.length} remaining</span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {upcomingDeadlines.map((d, i) => (
+              <DeadlineItem key={i} deadline={d} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ── Modules / Grades ── */}
       <section className="space-y-4">

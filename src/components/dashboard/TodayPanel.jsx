@@ -1,9 +1,14 @@
 import Card from '../ui/Card'
 import DataState from '../ui/DataState'
 import { useSchedule } from '../../hooks/useSchedule'
-import { schoolData } from '../../data/mockData'
+import { schoolData, getUpcomingDeadlines } from '../../data/mockData'
 
-const typeColors = { work: 'bg-accent-blue/15 text-accent-blue', school: 'bg-accent-violet/15 text-accent-violet', personal: 'bg-accent-emerald/15 text-accent-emerald' }
+const typeColors = {
+  work:     'bg-accent-blue/15 text-accent-blue',
+  school:   'bg-accent-violet/15 text-accent-violet',
+  personal: 'bg-accent-emerald/15 text-accent-emerald',
+  deadline: 'bg-red-900/40 text-red-400',
+}
 
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
@@ -27,7 +32,23 @@ export default function TodayPanel() {
   const dateLabel = now.toLocaleDateString('en-IE', { weekday: 'long', month: 'short', day: 'numeric' })
 
   const classes = todayClasses()
-  const combined = [...schedule, ...classes].sort((a, b) => a.time.localeCompare(b.time))
+  const todayDeadlines = getUpcomingDeadlines()
+    .filter(d => {
+      const due = new Date(d.due)
+      const today = now
+      return due.getFullYear() === today.getFullYear() &&
+             due.getMonth() === today.getMonth() &&
+             due.getDate() === today.getDate()
+    })
+    .map(d => ({
+      id: `deadline-${d.due}`,
+      time: new Date(d.due).toLocaleTimeString('en-IE', { hour: '2-digit', minute: '2-digit', hour12: false }),
+      title: d.title,
+      subtitle: 'Deadline',
+      type: 'deadline',
+      duration: null,
+    }))
+  const combined = [...schedule, ...classes, ...todayDeadlines].sort((a, b) => a.time.localeCompare(b.time))
 
   return (
     <Card title="Today" subtitle={dateLabel}>
