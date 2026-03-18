@@ -1,5 +1,4 @@
 // Mock data for Mission Control Dashboard — UI only, no backend
-import rawDeadlines from './deadlines.json'
 
 function _startOfDay(d) {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate())
@@ -17,16 +16,14 @@ export function deadlineUrgency(dateStr) {
   return 'later'
 }
 
-export function getUpcomingDeadlines(maxCount = Infinity) {
+export function getUpcomingDeadlines(deadlines, maxCount = Infinity) {
   const today = _startOfDay(new Date())
-  return rawDeadlines
+  return (deadlines ?? [])
     .map(d => ({ ...d, dueDate: new Date(d.due) }))
     .filter(d => _startOfDay(d.dueDate) >= today)
     .sort((a, b) => a.dueDate - b.dueDate)
     .slice(0, maxCount)
 }
-
-export const deadlines = rawDeadlines
 
 export const todaySchedule = [
   { time: '08:00', title: 'Morning standup', type: 'work', duration: 15 },

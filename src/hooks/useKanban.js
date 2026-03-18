@@ -67,7 +67,7 @@ export function useKanban() {
       setKanbanColumns((prev) => {
         const task = prev.flatMap((c) => c.tasks).find((t) => t.id === taskId)
         return prev.map((col) => {
-          if (col.id === newColumnId) return { ...col, tasks: [...col.tasks, { ...task, column_id: newColumnId }] }
+          if (col.id === newColumnId) return { ...col, tasks: [...col.tasks.filter(t => t.id !== taskId), { ...task, column_id: newColumnId }] }
           return { ...col, tasks: col.tasks.filter((t) => t.id !== taskId) }
         })
       })

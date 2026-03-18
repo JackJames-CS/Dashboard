@@ -1,6 +1,7 @@
 import Card from '../ui/Card'
 import DataState from '../ui/DataState'
 import { useSchoolAssignments } from '../../hooks/useSchoolAssignments'
+import { useDeadlines } from '../../hooks/useDeadlines'
 import { schoolData, getUpcomingDeadlines, deadlineUrgency } from '../../data/mockData'
 
 const URGENCY_STYLES = {
@@ -12,7 +13,8 @@ const URGENCY_STYLES = {
 
 export default function SchoolPanel() {
   const { assignments, loading, error } = useSchoolAssignments()
-  const upcomingDeadlines = getUpcomingDeadlines(3)
+  const { deadlines } = useDeadlines()
+  const upcomingDeadlines = getUpcomingDeadlines(deadlines, 3)
 
   return (
     <Card title="School" subtitle="Upcoming & schedule" action={<a href="/school" className="text-xs font-medium text-accent-indigo hover:underline">View all</a>}>

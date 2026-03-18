@@ -4,6 +4,7 @@ import Card from '../components/ui/Card'
 import DataState from '../components/ui/DataState'
 import { useSchoolAssignments } from '../hooks/useSchoolAssignments'
 import { useSchoolModules, classify } from '../hooks/useSchoolModules'
+import { useDeadlines } from '../hooks/useDeadlines'
 import { schoolData, schoolLinks, defaultModules, getUpcomingDeadlines, deadlineUrgency } from '../data/mockData'
 
 const URGENCY_CONFIG = {
@@ -309,8 +310,9 @@ export default function School() {
   const navigate = useNavigate()
   const { assignments, loading: aLoading, error: aError, addAssignment, updateProgress, deleteAssignment } = useSchoolAssignments()
   const { modules, qca, loading: mLoading, error: mError, addModule, updateModule, deleteModule } = useSchoolModules()
+  const { deadlines } = useDeadlines()
 
-  const upcomingDeadlines = getUpcomingDeadlines()
+  const upcomingDeadlines = getUpcomingDeadlines(deadlines)
 
   const [showAddModule, setShowAddModule] = useState(false)
   const [seeding, setSeeding] = useState(false)
